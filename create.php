@@ -16,18 +16,18 @@
 <body>
 	<?php include('header.php') ?>
     <div>
-		<div id="all_blogs">
+		<div>
 			<form action="process_post.php" method="post">
 		    	<fieldset>
-		      		<legend>New Product</legend>
+		      		<legend>Publish New Product</legend>
 		      			<p>
 		        			<label for="category">Category</label>
 		        			<select name="category" id="category">
-								<option value="tops">Tops</option>
-								<option value="skirts">Skirts</option>
-								<option value="pants">Pants</option>
-								<option value="underwear">Underwears</option>
-								<option value="dresses">Dresses</option>
+								<option value="1">Tops</option>
+								<option value="2">Skirts</option>
+								<option value="3">Pants</option>
+								<option value="4">Underwears</option>
+								<option value="5">Dresses</option>
 							</select>
 		      			</p>
 		      			<p>
@@ -36,7 +36,7 @@
 		      			</p>
 		      			<p>
 		        			<label for="productprice">Product Price</label>
-		        			<textarea name="productprice" id="productprice"></textarea>
+		        			<input type="number" name="productprice" id="productprice"></input>
 		      			</p>
 		      			<p>
 		        			<input type="submit" name="command" value="Submit Product" />
