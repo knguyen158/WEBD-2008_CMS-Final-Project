@@ -1,12 +1,17 @@
-<?php
-    define('DB_DSN','mysql:host=localhost;dbname=serverside');
-    define('DB_USER','admin');
-    define('DB_PASS','P@ssword01');
+<?php 
+  /*
+  This is the authenitcation page
+  */
 
-    try {
-        $db = new PDO(DB_DSN, DB_USER, DB_PASS);
-    } catch (PDOException $e) {
-        print "Error: " . $e->getMessage();
-        die(); // Force execution to stop on errors.
-    }
+  define('ADMIN_LOGIN','admin'); 
+  define('ADMIN_PASSWORD','P@ssword01'); 
+
+  if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) 
+      || ($_SERVER['PHP_AUTH_USER'] != ADMIN_LOGIN) 
+      || ($_SERVER['PHP_AUTH_PW'] != ADMIN_PASSWORD)) { 
+    header('HTTP/1.1 401 Unauthorized'); 
+    header('WWW-Authenticate: Basic realm="Our Blog"'); 
+    exit("Access Denied: Username and password required."); 
+  } 
+   
 ?>
