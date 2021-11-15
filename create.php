@@ -4,6 +4,14 @@
   	*/
 
 	require('admin.php');
+	require('connect.php');
+
+  // Retrieves rows from database
+  $query = "SELECT * FROM category ORDER BY name ASC";
+
+  $statement = $db->prepare($query);
+
+  $statement->execute();
 ?>
 
 <!DOCTYPE html>
@@ -12,34 +20,37 @@
     <meta charset="utf-8">
     <title>Publish a new product</title>
     <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 	<?php include('header.php') ?>
     <div>
 		<div>
-			<form action="process_post.php" method="post">
+			<form action="process_product.php" method="post">
 		    	<fieldset>
 		      		<legend>Publish New Product</legend>
+		      			<p>						
+						<label for="product_category">Category</label>
+						<select name="product_category" id="product_category">
+							<?php while ($row = $statement->fetch()): ?>
+							<option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+							<?php endwhile ?>
+						</select>							
+	      			</p>
+	      			<p>
+	        			<label for="product_name">Product name</label>
+	        			<textarea name="product_name" id="product_name"></textarea>
+	      			</p>
+	      			<p>
+	        			<label for="product_description">Description</label>
+	        			<textarea name="product_description" id="product_description"></textarea>
+	      			</p>
+	      			<p>
+	        			<label for="product_price">Price</label>
+	        			<input type="number" step="any" name="product_price" id="product_price"></input>
+	      			</p>
 		      			<p>
-		        			<label for="category">Category</label>
-		        			<select name="category" id="category">
-								<option value="1">Tops</option>
-								<option value="2">Skirts</option>
-								<option value="3">Pants</option>
-								<option value="4">Underwears</option>
-								<option value="5">Dresses</option>
-							</select>
-		      			</p>
-		      			<p>
-		        			<label for="productname">Product Name</label>
-		        			<textarea name="productname" id="productname"></textarea>
-		      			</p>
-		      			<p>
-		        			<label for="productprice">Product Price</label>
-		        			<input type="number" name="productprice" id="productprice"></input>
-		      			</p>
-		      			<p>
-		        			<input type="submit" name="command" value="Submit Product" />
+		        			<input type="submit" name="command" value="Publish Product" />
 		      			</p>
 		    	</fieldset>
 			</form>
