@@ -1,6 +1,6 @@
 <?php
-    define('DB_DSN','mysql:host=localhost;dbname=sfinalproject');
-    define('DB_USER','localhost');
+    define('DB_DSN','mysql:host=localhost;dbname=finalproject;charset=utf8');
+    define('DB_USER','admin');
     define('DB_PASS','Password01');
 
     try {
