@@ -3,14 +3,14 @@
   This is the authenitcation page
   */
 
-  define('ADMIN_LOGIN','admin'); 
-  define('ADMIN_PASSWORD','P@ssword01'); 
+  define('ADMIN_LOGIN','wally'); 
+  define('ADMIN_PASSWORD','pass'); 
 
   if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) 
       || ($_SERVER['PHP_AUTH_USER'] != ADMIN_LOGIN) 
       || ($_SERVER['PHP_AUTH_PW'] != ADMIN_PASSWORD)) { 
     header('HTTP/1.1 401 Unauthorized'); 
-    header('WWW-Authenticate: Basic realm="Our Blog"'); 
+    header('WWW-Authenticate: Basic realm="Products"'); 
     exit("Access Denied: Username and password required."); 
   } 
    
