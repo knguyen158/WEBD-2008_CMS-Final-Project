@@ -20,7 +20,6 @@
 
     $statement->execute();
   }
-
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +31,7 @@
 </head>
 <body>
   <?php include('header.php') ?>
+  </select>
   <div>
     <div>
       <?php while ($row = $statement->fetch()): ?>
