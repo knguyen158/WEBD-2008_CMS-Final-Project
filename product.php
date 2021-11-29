@@ -94,53 +94,57 @@
   <?php include('header.php') ?>
   <div>
     <div>
-      <?php while ($row = $statement->fetch()): ?>
-        <div>
-          <h2><a href="product_detail.php?id=<?= $row['id'] ?>"> <?= $row['name'] ?></a></h2>
-          <p> 
-            <span>Product name: </span>
-            <span><?= $row['name'] ?></span>
-          </p>
-          <?php $category_query = "SELECT * FROM category WHERE id = :id" ?>
-
-          <?php $category_statement = $db->prepare($category_query) ?>
-          <?php $category_statement->bindValue(':id', $row['category_id'], PDO::PARAM_INT) ?>
-          <?php $category_statement->execute() ?>
-          <?php $category_row = $category_statement->fetch() ?>
-          <p>
-            <span>Category: </span>
-            <span><?= $category_row['name'] ?></span> 
-          </p>
-          <?php if (strlen($row['description']) > 151): ?>
-            <p>
-              <span>Product description: </span>
-              <span><?= substr($row['description'], 0, 150) ?>
-              <a href="product_detail.php?id=<?= $row['id'] ?>">Read more</a>
-              </span>
+      <?php if ($statement -> rowCount() === 0): ?>
+        <p>Please try another product or category.</p>
+      <?php else :?>
+        <?php while ($row = $statement->fetch()): ?>
+          <div>
+            <h2><a href="product_detail.php?id=<?= $row['id'] ?>"> <?= $row['name'] ?></a></h2>
+            <p> 
+              <span>Product name: </span>
+              <span><?= $row['name'] ?></span>
             </p>
-          <?php else: ?>
-            <p>
-              <span>Description: </span> 
-              <span> <?= $row['description'] ?> </span>
-            </p>            
-          <?php endif ?>
-          <p>
-            <span>Price: </span>
-            <span>$<?= $row['price'] ?> </span> 
-          </p>
-          <?php $image_query = "SELECT * FROM image WHERE product_id = :id" ?>
+            <?php $category_query = "SELECT * FROM category WHERE id = :id" ?>
 
-          <?php $image_statement = $db->prepare($image_query) ?>
-          <?php $image_statement->bindValue(':id', $row['id'], PDO::PARAM_INT) ?>
-          <?php $image_statement->execute() ?>          
-          <?php if ($image_statement -> rowCount() !== 0): ?>
-            <?php $image_row = $image_statement->fetch() ?>
-              <div>
-                <img src="<?=$image_row['image_path']?>" alt="<?=$image_row['image_path']?>">
-              </div>
-          <?php endif ?>
-        </div>                
-      <?php endwhile ?>
+            <?php $category_statement = $db->prepare($category_query) ?>
+            <?php $category_statement->bindValue(':id', $row['category_id'], PDO::PARAM_INT) ?>
+            <?php $category_statement->execute() ?>
+            <?php $category_row = $category_statement->fetch() ?>
+            <p>
+              <span>Category: </span>
+              <span><?= $category_row['name'] ?></span> 
+            </p>
+            <?php if (strlen($row['description']) > 151): ?>
+              <p>
+                <span>Product description: </span>
+                <span><?= substr($row['description'], 0, 150) ?>
+                <a href="product_detail.php?id=<?= $row['id'] ?>">Read more</a>
+                </span>
+              </p>
+            <?php else: ?>
+              <p>
+                <span>Description: </span> 
+                <span> <?= $row['description'] ?> </span>
+              </p>            
+            <?php endif ?>
+            <p>
+              <span>Price: </span>
+              <span>$<?= $row['price'] ?> </span> 
+            </p>
+            <?php $image_query = "SELECT * FROM image WHERE product_id = :id" ?>
+
+            <?php $image_statement = $db->prepare($image_query) ?>
+            <?php $image_statement->bindValue(':id', $row['id'], PDO::PARAM_INT) ?>
+            <?php $image_statement->execute() ?>          
+            <?php if ($image_statement -> rowCount() !== 0): ?>
+              <?php $image_row = $image_statement->fetch() ?>
+                <div>
+                  <img src="<?=$image_row['image_path']?>" alt="<?=$image_row['image_path']?>">
+                </div>
+            <?php endif ?>
+          </div>                
+        <?php endwhile ?>
+      <?php endif ?>
       <?php if (isset($_GET['search_bar'])): ?>
         <?php $sanitized_search_bar = filter_input(INPUT_GET, 'search_bar', FILTER_SANITIZE_SPECIAL_CHARS) ?>
         <?php $sanitized_product_category = filter_input(INPUT_GET, 'product_category', FILTER_SANITIZE_SPECIAL_CHARS) ?>
