@@ -5,12 +5,80 @@
   
   require('connect.php');
 
-  // Retrieves rows from database
-  $query = "SELECT * FROM product ORDER BY date_created DESC";
+  // Retrieves rows from database (base query)
+  $query = "SELECT * FROM product";
 
-  $statement = $db->prepare($query);
+  if (isset($_GET['page'])) {
+      $page = $_GET['page'];
+    } else {
+      $page = 1;
+    }
 
-  $statement->execute();
+  // Results per page
+  $results_per_page = 1; 
+  $page_first_result = ($page - 1) * $results_per_page; 
+     
+
+  if (isset($_GET['search_bar']) && $_GET['product_category'] === "") {
+    $search_string = filter_input(INPUT_GET, 'search_bar', FILTER_SANITIZE_SPECIAL_CHARS);
+
+    $query .= " WHERE name LIKE '%".$search_string."%'";
+
+    $statement = $db->prepare($query);
+
+    $statement->execute();
+
+    $number_of_result = $statement -> rowCount();
+
+    $number_of_page = ceil ($number_of_result / $results_per_page);
+
+    $query .= " LIMIT $page_first_result, $results_per_page"; 
+
+    $statement = $db->prepare($query);
+
+    $statement->execute();
+  }
+  elseif (isset($_GET['search_bar']) && $_GET['product_category'] !== "") {
+    $search_string = filter_input(INPUT_GET, 'search_bar', FILTER_SANITIZE_SPECIAL_CHARS);
+    $category_search = $_GET['product_category'];
+
+    $query .= " WHERE category_id = $category_search AND name LIKE '%".$search_string."%'";
+
+    $statement = $db->prepare($query);
+
+    $statement->execute();
+
+    $number_of_result = $statement -> rowCount();
+
+    $number_of_page = ceil ($number_of_result / $results_per_page);
+
+    $query .= " LIMIT $page_first_result, $results_per_page"; 
+
+    $statement = $db->prepare($query);
+
+    $statement->execute();
+  }
+  else {
+    $query .= " ORDER BY date_created DESC";
+
+    $statement = $db->prepare($query);
+
+    $statement->execute();
+
+    $number_of_result = $statement -> rowCount();
+
+    $number_of_page = ceil ($number_of_result / $results_per_page);
+
+    $query .= " LIMIT $page_first_result, $results_per_page"; 
+
+    $statement = $db->prepare($query);
+
+    $statement->execute();
+  }
+
+  // $statement = $db->prepare($query);
+
+  // $statement->execute();
 
 ?>
 
@@ -60,8 +128,30 @@
             <span>Price: </span>
             <span>$<?= $row['price'] ?> </span> 
           </p>
+          <?php $image_query = "SELECT * FROM image WHERE product_id = :id" ?>
+
+          <?php $image_statement = $db->prepare($image_query) ?>
+          <?php $image_statement->bindValue(':id', $row['id'], PDO::PARAM_INT) ?>
+          <?php $image_statement->execute() ?>          
+          <?php if ($image_statement -> rowCount() !== 0): ?>
+            <?php $image_row = $image_statement->fetch() ?>
+              <div>
+                <img src="<?=$image_row['image_path']?>" alt="<?=$image_row['image_path']?>">
+              </div>
+          <?php endif ?>
         </div>                
       <?php endwhile ?>
+      <?php if (isset($_GET['search_bar'])): ?>
+        <?php $sanitized_search_bar = filter_input(INPUT_GET, 'search_bar', FILTER_SANITIZE_SPECIAL_CHARS) ?>
+        <?php $sanitized_product_category = filter_input(INPUT_GET, 'product_category', FILTER_SANITIZE_SPECIAL_CHARS) ?>
+        <?php for($page = 1; $page <= $number_of_page; $page++): ?>
+          <a href = "product.php?search_bar=<?=$sanitized_search_bar?>&product_category=<?=$sanitized_product_category?>&page=<?=$page?>"> <?=$page?> </a>
+        <?php endfor ?>
+      <?php else: ?>
+        <?php for($page = 1; $page <= $number_of_page; $page++): ?>
+        <a href = "product.php?page=<?=$page?>"> <?=$page?> </a>
+        <?php endfor ?>
+      <?php endif ?>  
     </div>
   <?php include('footer.php') ?>
   </div>
