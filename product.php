@@ -10,9 +10,9 @@
 
   if (isset($_GET['page'])) {
       $page = $_GET['page'];
-    } else {
-      $page = 1;
-    }
+  } else {
+    $page = 1;
+  }
 
   // Results per page
   $results_per_page = 1; 
