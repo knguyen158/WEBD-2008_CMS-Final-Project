@@ -10,28 +10,49 @@
 
     // Title and content validation
     if (empty($_POST['customer_name']) && $_POST['customer_name']!=0) {
-        array_push($errors, "Please enter your name to commend.");
+        array_push($errors, "Please enter your name to comment.");
     }
     elseif (empty($_POST['comment_content']) && $_POST['comment_content']!=0) {
-        array_push($errors, "Please enter your commend into the box.");
+        array_push($errors, "Please enter your comment into the box.");
     }
 
     if(empty($errors)) {
         // When admin chooses create a new product
         if ($_POST['command'] === "Post Comment") {
-        	$sanitized_comment = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $captcha = $_POST["captcha"];
 
-            $insert_query = "INSERT INTO comment (product_id, name, content) VALUES (:product_id, :customer_name, :comment_content)";
-            $insert_statement = $db->prepare($insert_query);
+            $captchaUser = filter_var($_POST["captcha"], FILTER_SANITIZE_STRING);
 
-            $insert_statement->bindValue(':product_id', $_SESSION['product_id'], PDO::PARAM_INT);
-            $insert_statement->bindValue(':customer_name', $sanitized_comment['customer_name']);
-            $insert_statement->bindValue(':comment_content', $sanitized_comment['comment_content']);
+            if($_SESSION['CAPTCHA_CODE'] == $captchaUser){
+                $sanitized_comment = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $insert_statement->execute();
+                $insert_query = "INSERT INTO comment (product_id, name, content) VALUES (:product_id, :customer_name, :comment_content)";
+                $insert_statement = $db->prepare($insert_query);
 
-            header("Location: product_detail.php?id=".$_POST['product_id']);
-            die();
+                $insert_statement->bindValue(':product_id', $_SESSION['product_id'], PDO::PARAM_INT);
+                $insert_statement->bindValue(':customer_name', $sanitized_comment['customer_name']);
+                $insert_statement->bindValue(':comment_content', $sanitized_comment['comment_content']);
+
+                $insert_statement->execute();
+
+                header("Location: product_detail.php?id=".$_POST['product_id']);
+                die();
+            } else {
+                //array_push($errors, "Your captcha is invalid. Pleae try again!");
+                // echo "<script>
+                //     window.history.go(-1);
+                // </script>";
+                // echo "<script>
+                //     alert('Your captcha is invalid. Pleae try again!');
+                //     </script>";
+                //header('Location: ' . $_SERVER['HTTP_REFERER']);
+                //header("Location: product_detail.php?id=".$_POST['product_id']);
+                echo "<script>
+                    alert('Your captcha is invalid. Please try again!'); 
+                    window.history.go(-1);
+                </script>";
+            }
+            //header('Location: ' . $_SERVER['HTTP_REFERER']);        	
         }
         // When admin wants to edit a comment
         else if ($_POST['command'] === "Update Comment") {
@@ -69,7 +90,8 @@
                 header("Location: edit.php?id=".$_POST['product_id']);
                 die();
             }  
-        }    
+        }
+           
     }   
 ?>
 
