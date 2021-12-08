@@ -66,6 +66,7 @@
     <title><?= strip_tags($row['name']) ?></title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
 </head>
 <body>
   <?php include('header.php') ?>
@@ -97,25 +98,33 @@
           </div>
         <?php endif ?>                
     </div>
-    <?php include('comment_form.php'); ?>
-
-    <!-- <form action="process_comment.php" method="post">
-        <fieldset>
-            <legend>Comments</legend>
-          <p>
+    <form action="process_comment.php" name="comment_form" method="post" enctype="multipart/form-data">
+      <fieldset>
+          <legend>Comments</legend>
+          <p class="form-group">
               <label for="customer_name">Customer's name</label>
-              <textarea name="customer_name" id="customer_name"></textarea>
-            </p>
-            <p>
-              <label for="comment_content">Comment</label>
-              <textarea name="comment_content" id="comment_content"></textarea>
-            </p>
-            <p>
-              <input type="hidden" name="product_id" value="<?= $row['id'] ?>" />
-              <input type="submit" name="command" value="Post Comment"/>
-            </p>  
-        </fieldset>
-      </form> -->
+              <input type="text" class="form-control" name="customer_name" id="customer_name">
+          </p>
+
+          <p class="form-group">
+              <label>Comment</label>
+              <input type="text" class="form-control" name="comment_content" id="comment_content">
+          </p>
+
+          <p class="row">
+              <p class="form-group col-6">
+                  <label>Enter Captcha</label>
+                  <input type="text" class="form-control" name="captcha" id="captcha">
+              </p>
+              <p class="form-group col-6">
+                  <label>Captcha Code</label>
+                  <img src="captcha.php" alt="PHP Captcha">
+              </p>
+          </p>
+          <input type="hidden" name="product_id" value="<?= $row['id'] ?>" />
+          <input type="submit" name="command" value="Post Comment" class="btn btn-dark">
+      </fieldset>
+    </form>
       <div>
         <?php while ($comment_row = $comment_statement->fetch()): ?>
           <p>
