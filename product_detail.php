@@ -97,7 +97,9 @@
           </div>
         <?php endif ?>                
     </div>
-    <form action="process_comment.php" method="post">
+    <?php include('comment_form.php'); ?>
+
+    <!-- <form action="process_comment.php" method="post">
         <fieldset>
             <legend>Comments</legend>
           <p>
@@ -113,7 +115,7 @@
               <input type="submit" name="command" value="Post Comment"/>
             </p>  
         </fieldset>
-      </form>
+      </form> -->
       <div>
         <?php while ($comment_row = $comment_statement->fetch()): ?>
           <p>
