@@ -6,7 +6,6 @@
   require('connect.php');
   session_start();
 
-
   // Retrieves rows from database
   $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
@@ -66,7 +65,6 @@
     <title><?= strip_tags($row['name']) ?></title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
 </head>
 <body>
   <?php include('header.php') ?>
