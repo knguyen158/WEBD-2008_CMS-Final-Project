@@ -1,16 +1,20 @@
 <?php
-session_start();
-$string = md5(time());
-$string = substr($string, 0, 6);
- 
-$_SESSION['captcha'] = $string;
- 
-$img = imagecreate(150,50);
-$background = imagecolorallocate($img, 0,0,0);
-$text_color = imagecolorallocate($img, 255,255,255);
-imagestring($img, 4,40,15, $string, $text_color);
- 
-header("Content-type: image/png");
-imagepng($img);
-imagedestroy($img);
+  session_start();
+
+  // Generate captcha code
+  $random_num    = md5(random_bytes(64));
+  $captcha_code  = substr($random_num, 0, 6);
+
+  // Assign captcha in session
+  $_SESSION['CAPTCHA_CODE'] = $captcha_code;
+
+  // Create captcha image
+  $layer = imagecreatetruecolor(168, 37);
+  $captcha_bg = imagecolorallocate($layer, 247, 174, 71);
+  imagefill($layer, 0, 0, $captcha_bg);
+  $captcha_text_color = imagecolorallocate($layer, 0, 0, 0);
+  imagestring($layer, 5, 55, 10, $captcha_code, $captcha_text_color);
+  header("Content-type: image/jpeg");
+  imagejpeg($layer);
+
 ?>
