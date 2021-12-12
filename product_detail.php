@@ -56,6 +56,30 @@
     }
 
   $_SESSION['product_id'] = filter_var($row['id'], FILTER_SANITIZE_NUMBER_INT);
+
+  $req_url = 'https://v6.exchangerate-api.com/v6/19090490b3cd3d40f2b249db/latest/CAD';
+  $response_json = file_get_contents($req_url);
+
+  if(false !== $response_json) {
+
+    // Try/catch for json_decode operation
+    try {
+      // Decoding
+      $response = json_decode($response_json);
+      // Check for success
+      if('success' === $response->result) {
+        // YOUR APPLICATION CODE HERE, e.g.        
+        $USD_price = round(($row['price'] * $response->conversion_rates->USD), 2);
+        $EUR_price = round(($row['price'] * $response->conversion_rates->EUR), 2);
+        $AUD_price = round(($row['price'] * $response->conversion_rates->AUD), 2);
+        $GBP_price = round(($row['price'] * $response->conversion_rates->GBP), 2);
+        $HKD_price = round(($row['price'] * $response->conversion_rates->HKD), 2);
+      }
+    }
+    catch(Exception $e) {
+      echo 'Message: ' .$e->getMessage();
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +110,17 @@
           </p>
           <p> 
             <span>Price: </span>
-            <span>$<?= $row['price'] ?></span>
+            <span>CA$<?= $row['price'] ?></span>
+            <p>
+              <label for="price_exchange">Check the price in your currency:</label>
+              <select name="price_exchange" id="price_exchange">    
+                <option value="<?= $USD_price ?>">US$<?= $USD_price ?></option>
+                <option value="<?= $EUR_price ?>">€<?= $EUR_price ?></option>
+                <option value="<?= $AUD_price ?>">AU$<?= $AUD_price ?></option>
+                <option value="<?= $GBP_price ?>">£<?= $GBP_price ?></option>
+                <option value="<?= $HKD_price ?>">HK$<?= $HKD_price ?></option>
+              </select> 
+            </p>            
           </p>
         </div>
         <?php if($image_statement -> rowCount() !== 0): ?>
