@@ -129,7 +129,7 @@
             <?php endif ?>
             <p>
               <span>Price: </span>
-              <span>$<?= $row['price'] ?> </span> 
+              <span>CA$<?= $row['price'] ?> </span> 
             </p>
             <?php $image_query = "SELECT * FROM image WHERE product_id = :id" ?>
 
