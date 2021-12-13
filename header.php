@@ -31,7 +31,7 @@
 </div>
 <a href="login.php">Login</a>
 <a href="register.php">Sign Up</a>
-<form action="product.php" method="get">
+<form action="product.php" method="get" id="search_form">
   <input type="text" name="search_bar">
   <select name="product_category" id="product_category">    
     <option value="">All Products</option>
