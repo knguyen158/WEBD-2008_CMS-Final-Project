@@ -112,9 +112,9 @@ footer li a:hover, footer li a:focus {
 }
 
 form {
-    border: 1px solid #1A33FF;
-    background: #ecf5fc;
-    padding: 40px 50px 45px;
+    /*border: 1px solid #1A33FF;
+    background: #ecf5fc;*/
+    padding: 10px 0px 15px;
 }
 
 .form-control:focus {
@@ -137,4 +137,8 @@ label {
 .form-control.error {
     border-color: red;
     padding: .375rem .75rem;
+}
+
+#search_form {
+  width: 20%;
 }
