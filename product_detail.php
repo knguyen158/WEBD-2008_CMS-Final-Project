@@ -57,6 +57,7 @@
 
   $_SESSION['product_id'] = filter_var($row['id'], FILTER_SANITIZE_NUMBER_INT);
 
+  // ExchangeRate API
   $req_url = 'https://v6.exchangerate-api.com/v6/19090490b3cd3d40f2b249db/latest/CAD';
   $response_json = file_get_contents($req_url);
 
@@ -130,7 +131,7 @@
           </div>
         <?php endif ?>                
     </div>
-    <form action="process_comment.php" name="comment_form" method="post" enctype="multipart/form-data">
+    <form action="process_comment.php" name="comment_form" method="post" enctype="multipart/form-data" id="comment_form">
       <fieldset>
           <legend>Comments</legend>
           <p class="form-group">
